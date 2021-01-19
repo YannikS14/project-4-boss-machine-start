@@ -46,7 +46,6 @@ const postMinion = (req, res, next) => {
     res.status(400).json({ message: 'Invalid request body!' });
   } else {
     const response = addToDatabase('minions', minionToAdd);
-    console.log(response);
     res
       .status(201)
       .json({ message: 'Added new minion!', data: response });

@@ -14,7 +14,11 @@ const {
   updateIdea,
   deleteIdea,
 } = require('./ideasController');
-const meetingsController = require('./meetingsController');
+const {
+  getAllMeetings,
+  postMeeting,
+  deleteMeetings,
+} = require('./meetingsController');
 
 apiRouter.route('/minions').get(getAllMinions).post(postMinion);
 apiRouter
@@ -28,10 +32,10 @@ apiRouter
   .get(getOneIdea)
   .put(updateIdea)
   .delete(deleteIdea);
-// apiRouter
-//   .route('/meetings')
-//   .get(meetingsController.getAllMeetings)
-//   .post(meetingsController.postMeeting)
-//   .delete(meetingsController.deleteMeeting);
+apiRouter
+  .route('/meetings')
+  .get(getAllMeetings)
+  .post(postMeeting)
+  .delete(deleteMeetings);
 
 module.exports = apiRouter;

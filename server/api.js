@@ -7,7 +7,13 @@ const {
   updateMinion,
   deleteMinion,
 } = require('./minionsController');
-const ideasController = require('./ideasController');
+const {
+  getAllIdeas,
+  getOneIdea,
+  postIdea,
+  updateIdea,
+  deleteIdea,
+} = require('./ideasController');
 const meetingsController = require('./meetingsController');
 
 apiRouter.route('/minions').get(getAllMinions).post(postMinion);
@@ -16,15 +22,12 @@ apiRouter
   .get(getOneMinion)
   .put(updateMinion)
   .delete(deleteMinion);
-// apiRouter
-//   .route('/ideas')
-//   .get(ideasController.getAllIdeas)
-//   .post(ideasController.postIdea);
-// apiRouter
-//   .route('/ideas/:_ideaId')
-//   .get(ideasController.getOneIdea)
-//   .put(ideasController.updateIdea)
-//   .delete(ideasController.deleteIdea);
+apiRouter.route('/ideas').get(getAllIdeas).post(postIdea);
+apiRouter
+  .route('/ideas/:_ideaId')
+  .get(getOneIdea)
+  .put(updateIdea)
+  .delete(deleteIdea);
 // apiRouter
 //   .route('/meetings')
 //   .get(meetingsController.getAllMeetings)

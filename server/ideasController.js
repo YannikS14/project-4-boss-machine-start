@@ -8,9 +8,7 @@ const {
 
 const getAllIdeas = (req, res, next) => {
   const ideas = getAllFromDatabase('ideas');
-  res
-    .status(200)
-    .json({ message: 'Fetched all ideas from DB!', data: ideas });
+  res.status(200).json(ideas);
 };
 
 const getOneIdea = (req, res, next) => {
@@ -21,10 +19,7 @@ const getOneIdea = (req, res, next) => {
         message: 'Idea ' + req.params._ideaId + ' not found!',
       });
     } else {
-      res.status(200).json({
-        message: 'Fetched idea ' + req.params._ideaId + ' from DB!',
-        data: idea,
-      });
+      res.status(200).json(idea);
     }
   } else {
     res.status(400).json({ message: 'Invalid idea id!' });
@@ -34,48 +29,41 @@ const getOneIdea = (req, res, next) => {
 const postIdea = (req, res, next) => {
   const ideaToAdd = req.body;
   if (
-    !ideaToAdd.name ||
-    !ideaToAdd.description ||
-    !ideaToAdd.numWeeks ||
-    !ideaToAdd.weeklyRevenue
+    typeof ideaToAdd.name !== 'string' ||
+    typeof ideaToAdd.description !== 'string' ||
+    typeof ideaToAdd.numWeeks !== 'number' ||
+    typeof ideaToAdd.weeklyRevenue !== 'number'
   ) {
     res.status(400).json({ message: 'Invalid request body!' });
   } else {
     const response = addToDatabase('ideas', ideaToAdd);
-    res
-      .status(201)
-      .json({ message: 'Added new idea!', data: response });
+    res.status(201).json(response);
   }
 };
 
 const updateIdea = (req, res, next) => {
   let ideaToUpdate = req.body;
   if (
-    !req.params._ideaId ||
-    !ideaToUpdate.name ||
-    !ideaToUpdate.description ||
-    !ideaToUpdate.numWeeks ||
-    !ideaToUpdate.weeklyRevenue
+    typeof ideaToUpdate.name !== 'string' ||
+    typeof ideaToUpdate.description !== 'string' ||
+    typeof ideaToUpdate.numWeeks !== 'number' ||
+    typeof ideaToUpdate.weeklyRevenue !== 'number'
   ) {
-    res.status(400).json({ message: 'Invalid request body!' });
+    res.status(404).json({ message: 'Invalid request body!' });
   } else {
     const idea = getFromDatabaseById('ideas', req.params._ideaId);
     ideaToUpdate.id = idea.id;
-    if (!idea) {
-      res.status(404).json({ message: 'Idea not found in DB!' });
-    } else {
-      const response = updateInstanceInDatabase('ideas', req.body);
-      console.log(response);
-      res
-        .status(200)
-        .json({ message: 'Updated idea!', data: response });
-    }
+    const response = updateInstanceInDatabase('ideas', req.body);
+    res.status(200).json(response);
   }
 };
 
 const deleteIdea = (req, res, next) => {
-  if (!req.params._ideaId) {
-    res.status(400).json({ message: 'Invalid request body!' });
+  if (
+    !req.params._ideaId ||
+    typeof parseInt(req.params._ideaId) !== 'number'
+  ) {
+    res.status(404).json({ message: 'Invalid request body!' });
   }
   const response = deleteFromDatabasebyId(
     'ideas',

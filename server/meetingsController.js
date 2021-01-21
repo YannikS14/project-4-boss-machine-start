@@ -7,18 +7,13 @@ const {
 
 const getAllMeetings = (req, res, next) => {
   const meetings = getAllFromDatabase('meetings');
-  res.status(200).json({
-    message: 'Fetched all meetings from DB!',
-    data: meetings,
-  });
+  res.status(200).json(meetings);
 };
 
 const postMeeting = (req, res, next) => {
   const meetingToAdd = createMeeting();
   const response = addToDatabase('meetings', meetingToAdd);
-  res
-    .status(201)
-    .json({ message: 'Meeting created!', data: response });
+  res.status(201).json(response);
 };
 
 const deleteMeetings = (req, res, next) => {

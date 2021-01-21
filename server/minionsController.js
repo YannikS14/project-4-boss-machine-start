@@ -8,9 +8,7 @@ const {
 
 const getAllMinions = (req, res, next) => {
   const minions = getAllFromDatabase('minions');
-  res
-    .status(200)
-    .json({ message: 'Fetched all minions from DB!', data: minions });
+  res.status(200).json(minions);
 };
 
 const getOneMinion = (req, res, next) => {
@@ -24,11 +22,7 @@ const getOneMinion = (req, res, next) => {
         message: 'Minion ' + req.params._minionId + ' not found!',
       });
     } else {
-      res.status(200).json({
-        message:
-          'Fetched minion ' + req.params._minionId + ' from DB!',
-        data: minion,
-      });
+      res.status(200).json(minion);
     }
   } else {
     res.status(400).json({ message: 'Invalid minion id!' });
@@ -38,17 +32,15 @@ const getOneMinion = (req, res, next) => {
 const postMinion = (req, res, next) => {
   const minionToAdd = req.body;
   if (
-    !minionToAdd.name ||
-    !minionToAdd.title ||
-    !minionToAdd.weaknesses ||
-    !minionToAdd.salary
+    typeof minionToAdd.name !== 'string' ||
+    typeof minionToAdd.title !== 'string' ||
+    typeof minionToAdd.weaknesses !== 'string' ||
+    typeof parseInt(minionToAdd.salary) !== 'number'
   ) {
     res.status(400).json({ message: 'Invalid request body!' });
   } else {
     const response = addToDatabase('minions', minionToAdd);
-    res
-      .status(201)
-      .json({ message: 'Added new minion!', data: response });
+    res.status(201).json(response);
   }
 };
 
@@ -56,12 +48,13 @@ const updateMinion = (req, res, next) => {
   let minionToUpdate = req.body;
   if (
     !req.params._minionId ||
+    typeof parseInt(req.params._minionId) !== 'number' ||
     !minionToUpdate.name ||
     !minionToUpdate.title ||
     !minionToUpdate.weaknesses ||
     !minionToUpdate.salary
   ) {
-    res.status(400).json({ message: 'Invalid request body!' });
+    res.status(404).json({ message: 'Invalid request body!' });
   } else {
     const minion = getFromDatabaseById(
       'minions',
@@ -72,10 +65,7 @@ const updateMinion = (req, res, next) => {
       res.status(404).json({ message: 'Minion not found in DB!' });
     } else {
       const response = updateInstanceInDatabase('minions', req.body);
-      console.log(response);
-      res
-        .status(200)
-        .json({ message: 'Updated minion!', data: response });
+      res.status(200).json(response);
     }
   }
 };

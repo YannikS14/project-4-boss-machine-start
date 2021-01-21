@@ -7,7 +7,12 @@ const {
   updateMinion,
   deleteMinion,
 } = require('./minionsController');
-const { getAllWork, postWork } = require('./workController');
+const {
+  getAllWork,
+  postWork,
+  updateWork,
+  deleteWork,
+} = require('./workController');
 const {
   getAllIdeas,
   getOneIdea,
@@ -46,6 +51,10 @@ apiRouter
   .route('/minions/:_minionId/work')
   .get(getAllWork)
   .post(postWork);
+apiRouter
+  .route('/minions/:_minionId/work/:_workId')
+  .put(updateWork)
+  .delete(deleteWork);
 apiRouter
   .route('/ideas')
   .get(getAllIdeas)
